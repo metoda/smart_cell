@@ -3,8 +3,7 @@ module SmartCell
     include Celluloid
 
     TICK_LEN = 5
-    THRESHOLD = 0.7
-    MULTIPLIER = 10
+    BASE_AMOUNT = 15
     MAX_WORKERS_SEC = 50
     DEBUG = false
 
@@ -26,8 +25,7 @@ module SmartCell
 
     def configure(opts)
       @tick_len = opts.delete(:tick_len) || TICK_LEN
-      @threshold = opts.delete(:threshold) || THRESHOLD
-      @multiplier = opts.delete(:multiplier) || MULTIPLIER
+      @base_amount = opts.delete(:base_amount) || BASE_AMOUNT
       @max_workers_sec = opts.delete(:max_workers_sec) || MAX_WORKERS_SEC
       @debug = opts.delete(:debug) || DEBUG
     end
@@ -39,7 +37,7 @@ module SmartCell
       p [sum, total, cpu] if @debug
       new_count =
         if cpu.nil?
-          (@threshold * @multiplier).to_i
+          @base_amount
         else
           capacity = (total / cpu).floor
           puts "capacity #{capacity}" if @debug
