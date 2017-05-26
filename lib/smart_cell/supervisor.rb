@@ -20,6 +20,7 @@ module SmartCell
       @processor = processor
 
       Tracker.tick!
+      run
       every(@tick_len) { run }
     end
 
@@ -33,7 +34,7 @@ module SmartCell
     def run
       return if @shutdown
       sum, total, cpu = Tracker.diff
-      puts
+      puts if @debug
       p [sum, total, cpu] if @debug
       new_count =
         if cpu.nil?
